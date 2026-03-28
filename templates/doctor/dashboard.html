@@ -1,0 +1,110 @@
+{% extends 'base_dashboard.html' %}
+{% block title %}Dashboard Doctor - EPS Sura{% endblock %}
+{% block page_title %}Panel del Médico{% endblock %}
+{% block content %}
+
+<div class="welcome-banner">
+  <div>
+    <h2>Dr(a). {{ session.nombre }} {{ session.apellido }}</h2>
+    <p>{{ doctor.especialidad }} &nbsp;·&nbsp; {{ doctor.consultorio }}</p>
+  </div>
+  <a href="{{ url_for('doctor_agenda') }}" class="btn-primary" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);box-shadow:none">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    Agenda Semanal
+  </a>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-icon-wrap" style="background:rgba(10,132,255,.1)">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#0A84FF" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+    </div>
+    <div><div class="stat-val">{{ citas_hoy|length }}</div><div class="stat-lbl">Citas hoy</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon-wrap" style="background:rgba(48,209,88,.1)">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#30D158" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <div><div class="stat-val">{{ stats.atendidas or 0 }}</div><div class="stat-lbl">Total atendidos</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon-wrap" style="background:rgba(255,159,10,.1)">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#FF9F0A" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    </div>
+    <div><div class="stat-val">{{ stats.este_mes or 0 }}</div><div class="stat-lbl">Este mes</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon-wrap" style="background:rgba(255,59,48,.1)">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#FF3B30" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+    </div>
+    <div><div class="stat-val">{{ stats.no_asistencias or 0 }}</div><div class="stat-lbl">No asistencias</div></div>
+  </div>
+</div>
+
+<div class="section-card">
+  <div class="card-header">
+    <h3>Pacientes de Hoy</h3>
+    <span class="badge badge-pendiente">{{ citas_hoy|selectattr('estado','equalto','pendiente')|list|length }} pendientes</span>
+  </div>
+  {% if citas_hoy %}
+  <div class="pacientes-list">
+    {% for cita in citas_hoy %}
+    <div class="paciente-item {% if cita.estado != 'pendiente' %}opacity-50{% endif %}">
+      <div class="p-num">{{ loop.index }}</div>
+      <div class="p-avatar">{{ cita.paciente_nombre[0] }}{{ cita.paciente_apellido[0] }}</div>
+      <div class="p-info">
+        <div class="p-name">{{ cita.paciente_nombre }} {{ cita.paciente_apellido }}</div>
+        <div class="p-meta">CC {{ cita.paciente_doc_num }} &nbsp;·&nbsp; {{ cita.paciente_tel or '—' }}</div>
+        <div class="p-meta">{{ cita.hora }} &nbsp;·&nbsp; {{ cita.tipo_cita }}</div>
+      </div>
+      <div class="p-estado">
+        <span class="badge badge-{{ cita.estado }}">{{ cita.estado|replace('_',' ')|capitalize }}</span>
+      </div>
+      {% if cita.estado == 'pendiente' %}
+      <div class="p-actions">
+        <button onclick="openAtenderModal({{ cita.id }}, '{{ cita.paciente_nombre }} {{ cita.paciente_apellido }}')" class="btn-success">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+          Atendido
+        </button>
+        <form method="POST" action="{{ url_for('doctor_marcar_no_asistio', cita_id=cita.id) }}" id="noAsistioForm{{ cita.id }}" style="display:inline">
+          <button type="button" class="btn-danger"
+            data-confirm="Se marcará como no asistió y el siguiente paciente será adelantado automáticamente."
+            data-confirm-title="¿Marcar como No Asistió?"
+            data-confirm-icon="danger"
+            onclick="confirmNoAsistio({{ cita.id }})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            No Asistió
+          </button>
+        </form>
+        <a href="{{ url_for('doctor_historial_paciente', paciente_doc=cita.paciente_doc_num) }}" class="btn-outline primary">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          Historial
+        </a>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">
+      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color:#AEAEB2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <p>Sin pacientes programados para hoy.</p>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}
+{% block extra_js %}
+<script>
+function confirmNoAsistio(citaId) {
+  showConfirm({
+    title: '¿Marcar como No Asistió?',
+    desc: 'El siguiente paciente en cola será adelantado automáticamente.',
+    icon: 'danger',
+    onConfirm: () => document.getElementById('noAsistioForm' + citaId).submit()
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base_dashboard.html' %}
+{% block title %}Historial Paciente - EPS HealWorld{% endblock %}
+{% block page_title %}Historial del Paciente{% endblock %}
+{% block content %}
+<div class="section-card" style="margin-bottom:18px">
+  <div class="card-header">
+    <div style="display:flex;align-items:center;gap:9px">
+      <div style="width:32px;height:32px;border-radius:9px;background:rgba(10,132,255,.1);display:flex;align-items:center;justify-content:center">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#0A84FF" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+      </div>
+      <h3>{{ paciente.nombre }} {{ paciente.apellido }}</h3>
+    </div>
+    <a href="{{ url_for('doctor_agenda') }}" class="btn-secondary sm">
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Volver
+    </a>
+  </div>
+  <div class="patient-info-grid">
+    <div class="pi-item"><span>CC</span><strong>{{ paciente.documento }}</strong></div>
+    <div class="pi-item"><span>Correo</span><strong>{{ paciente.correo }}</strong></div>
+    <div class="pi-item"><span>Teléfono</span><strong>{{ paciente.telefono or '—' }}</strong></div>
+    <div class="pi-item"><span>EPS</span><strong>{{ paciente.eps or '—' }}</strong></div>
+  </div>
+</div>
+
+<div class="section-card">
+  <div class="card-header">
+    <h3>Historial de citas</h3>
+    <span class="badge badge-info">{{ citas|length }} registros</span>
+  </div>
+  {% if citas %}
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>Fecha</th><th>Hora</th><th>Tipo</th><th>Especialidad</th><th>Estado</th><th>Notas</th></tr>
+      </thead>
+      <tbody>
+        {% for cita in citas %}
+        <tr>
+          <td>{{ cita.fecha.strftime('%d/%m/%Y') }}</td>
+          <td>{{ cita.hora }}</td>
+          <td>{{ cita.tipo_cita }}</td>
+          <td>{{ cita.especialidad }}</td>
+          <td><span class="badge badge-{{ cita.estado }}">{{ cita.estado|replace('_',' ')|capitalize }}</span></td>
+          <td style="font-size:.82rem;color:var(--text-secondary);max-width:200px">{{ cita.notas or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state"><p>Sin historial de citas con este paciente.</p></div>
+  {% endif %}
+</div>
+{% endblock %}

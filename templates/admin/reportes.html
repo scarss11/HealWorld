@@ -1,0 +1,61 @@
+{% extends 'base_dashboard.html' %}
+{% block title %}Reportes - EPS Sura{% endblock %}
+{% block page_title %}Reportes del Sistema{% endblock %}
+{% block content %}
+
+<div class="reports-grid">
+    <!-- REPORTE MENSUAL -->
+    <div class="section-card">
+        <div class="card-header">
+            <h3>Citas por Mes</h3>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr><th>Mes</th><th>Total</th><th>Atendidas</th><th>No Asistió</th><th>% Asistencia</th></tr>
+            </thead>
+            <tbody>
+                {% for fila in mensual %}
+                <tr>
+                    <td><strong>{{ fila.mes }}</strong></td>
+                    <td>{{ fila.total }}</td>
+                    <td><span class="badge badge-atendida">{{ fila.atendidas or 0 }}</span></td>
+                    <td><span class="badge badge-no_asistio">{{ fila.no_asistencias or 0 }}</span></td>
+                    <td>
+                        {% if fila.total > 0 %}
+                        <div class="progress-bar-wrap">
+                            <div class="progress-bar" style="width:{{ ((fila.atendidas or 0) / fila.total * 100)|round|int }}%"></div>
+                            <span>{{ ((fila.atendidas or 0) / fila.total * 100)|round|int }}%</span>
+                        </div>
+                        {% else %}—{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- REPORTE POR DOCTOR -->
+    <div class="section-card">
+        <div class="card-header">
+            <h3>Rendimiento por Doctor</h3>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr><th>Doctor</th><th>Especialidad</th><th>Total</th><th>Atendidas</th><th>No Asistió</th></tr>
+            </thead>
+            <tbody>
+                {% for fila in por_doctor %}
+                <tr>
+                    <td><strong>Dr(a). {{ fila.nombre }} {{ fila.apellido }}</strong></td>
+                    <td>{{ fila.especialidad }}</td>
+                    <td>{{ fila.total }}</td>
+                    <td><span class="badge badge-atendida">{{ fila.atendidas or 0 }}</span></td>
+                    <td><span class="badge badge-no_asistio">{{ fila.no_asistencias or 0 }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

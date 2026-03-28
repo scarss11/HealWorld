@@ -1,0 +1,194 @@
+{% extends 'base_landing.html' %}
+{% block title %}EPS HealWorld — Tu salud en buenas manos{% endblock %}
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Sistema Inteligente de Citas Médicas
+    </div>
+    <h1 class="hero-title">Tu salud en<br><span class="hero-highlight">buenas manos</span></h1>
+    <p class="hero-desc">Agenda tu cita médica en segundos. Accede a los mejores especialistas, sin filas ni esperas innecesarias.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('registro') }}" class="btn-hero-primary">Agenda tu cita →</a>
+      <a href="{{ url_for('login') }}" class="btn-hero-secondary">Iniciar sesión</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>+5,000</strong><span>Pacientes</span></div>
+      <div class="stat-div"></div>
+      <div class="stat"><strong>+50</strong><span>Especialistas</span></div>
+      <div class="stat-div"></div>
+      <div class="stat"><strong>24/7</strong><span>Disponible</span></div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hc-header">
+        <span class="hc-pulse"></span>
+        <span>Próxima cita</span>
+      </div>
+      <div class="hc-doc">
+        <div class="hc-avatar">MG</div>
+        <div>
+          <div class="hc-name">Dra. María González</div>
+          <div class="hc-spec">Medicina General</div>
+        </div>
+      </div>
+      <div class="hc-info">
+        <div class="hc-item">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Mañana, 8:30 AM
+        </div>
+        <div class="hc-item">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Consultorio 101 — Sede Centro
+        </div>
+      </div>
+      <div class="hc-badge">Cita confirmada ✓</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="section" id="servicios" style="background:white">
+  <div class="section-container">
+    <div class="section-header">
+      <div class="section-tag">Servicios</div>
+      <h2 class="section-title">Todo lo que necesitas,<br>en un solo lugar</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon-wrap">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#0A84FF" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+        </div>
+        <h3>Medicina General</h3>
+        <p>Consultas de primer nivel, control de enfermedades crónicas y seguimiento preventivo.</p>
+        <a href="{{ url_for('registro') }}" class="service-link">Agendar →</a>
+      </div>
+      <div class="service-card featured">
+        <div class="service-icon-wrap">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#0A84FF" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <h3>Odontología</h3>
+        <p>Limpieza dental, ortodoncia, endodoncia y todos los servicios de salud oral.</p>
+        <a href="{{ url_for('registro') }}" class="service-link">Agendar →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrap">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#0A84FF" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        </div>
+        <h3>Especialistas</h3>
+        <p>Cardiología, pediatría, dermatología, neurología y más de 20 especialidades.</p>
+        <a href="{{ url_for('registro') }}" class="service-link">Agendar →</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon-wrap">
+          <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#0A84FF" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+        </div>
+        <h3>Laboratorio</h3>
+        <p>Exámenes de sangre, orina, imágenes diagnósticas y resultados en línea.</p>
+        <a href="{{ url_for('registro') }}" class="service-link">Agendar →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTORES -->
+<section class="section section-gray" id="doctores">
+  <div class="section-container">
+    <div class="section-header">
+      <div class="section-tag">Nuestro Equipo</div>
+      <h2 class="section-title">Médicos expertos<br>comprometidos contigo</h2>
+    </div>
+    <div class="doctors-grid">
+      {% for doctor in doctores %}
+      <div class="doctor-card">
+        <div class="doctor-avatar">{{ doctor.nombre[0] }}{{ doctor.apellido[0] }}</div>
+        <div class="doctor-info">
+          <h4>Dr(a). {{ doctor.nombre }} {{ doctor.apellido }}</h4>
+          <p class="doctor-spec">{{ doctor.especialidad }}</p>
+          <p class="doctor-consult">{{ doctor.consultorio }}</p>
+        </div>
+        <a href="{{ url_for('registro') }}" class="btn-doctor">Agendar cita</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PASOS -->
+<section class="section" style="background:white">
+  <div class="section-container">
+    <div class="section-header">
+      <div class="section-tag">Proceso Simple</div>
+      <h2 class="section-title">Agenda tu cita<br>en 3 pasos</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">Paso 01</div>
+        <h3>Regístrate</h3>
+        <p>Crea tu cuenta con tu número de documento y correo electrónico en segundos.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">Paso 02</div>
+        <h3>Elige tu médico</h3>
+        <p>Selecciona la especialidad y el doctor disponible que mejor se adapte a ti.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-num">Paso 03</div>
+        <h3>Confirma tu cita</h3>
+        <p>Elige fecha y hora. Confirmación inmediata visible en tu dashboard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section-cta-wrap">
+  <div class="section-cta">
+    <div class="contact-cta">
+      <h2>¿Listo para cuidar tu salud?</h2>
+      <p>Únete a miles de pacientes que confían en EPS HealWorld.</p>
+      <a href="{{ url_for('registro') }}" class="btn-cta">Crear cuenta gratis →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" id="contacto">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <div class="logo-icon" style="width:32px;height:32px;font-size:.85rem;border-radius:8px">S</div>
+        <span>EPS <strong>HealWorld</strong></span>
+      </div>
+      <p>Comprometidos con tu bienestar y el de tu familia. Atención de calidad, siempre.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Servicios</h4>
+      <a href="#">Medicina General</a>
+      <a href="#">Odontología</a>
+      <a href="#">Especialistas</a>
+      <a href="#">Laboratorio</a>
+    </div>
+    <div class="footer-links">
+      <h4>Sedes</h4>
+      <a href="#">Sede Centro</a>
+      <a href="#">Sede Norte</a>
+      <a href="#">Sede Sur</a>
+    </div>
+    <div class="footer-contact">
+      <h4>Contacto</h4>
+      <p>01 8000 123 456</p>
+      <p>contacto@healworld.com</p>
+      <p>Cra 43A #5A-113, Medellín</p>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2025 EPS HealWorld. Todos los derechos reservados.</div>
+</footer>
+
+{% endblock %}

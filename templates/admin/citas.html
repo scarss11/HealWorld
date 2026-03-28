@@ -1,0 +1,90 @@
+{% extends 'base_dashboard.html' %}
+{% block title %}Citas del Sistema - EPS Sura{% endblock %}
+{% block page_title %}Gestión de Citas{% endblock %}
+{% block content %}
+
+<!-- FILTROS -->
+<div class="section-card">
+    <div class="card-header"><h3>Filtros</h3></div>
+    <form method="GET" action="{{ url_for('admin_citas') }}">
+        <div class="filter-row">
+            <div class="form-group sm">
+                <label>Fecha</label>
+                <input type="date" name="fecha" value="{{ filtro_fecha }}">
+            </div>
+            <div class="form-group sm">
+                <label>Doctor</label>
+                <select name="doctor_id">
+                    <option value="">Todos los doctores</option>
+                    {% for doc in doctores %}
+                    <option value="{{ doc.id }}" {% if filtro_doctor == doc.id|string %}selected{% endif %}>
+                        Dr(a). {{ doc.nombre }} {{ doc.apellido }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group sm">
+                <label>Estado</label>
+                <select name="estado">
+                    <option value="">Todos los estados</option>
+                    <option value="pendiente" {% if filtro_estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                    <option value="atendida" {% if filtro_estado == 'atendida' %}selected{% endif %}>Atendida</option>
+                    <option value="no_asistio" {% if filtro_estado == 'no_asistio' %}selected{% endif %}>No Asistió</option>
+                    <option value="cancelada" {% if filtro_estado == 'cancelada' %}selected{% endif %}>Cancelada</option>
+                </select>
+            </div>
+            <div class="form-group sm align-end">
+                <button type="submit" class="btn-primary">Filtrar</button>
+                <a href="{{ url_for('admin_citas') }}" class="btn-secondary">Limpiar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="section-card">
+    <div class="card-header">
+        <h3>Resultados</h3>
+        <span class="badge badge-info">{{ citas|length }} citas</span>
+    </div>
+    {% if citas %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Paciente</th>
+                <th>Doctor</th>
+                <th>Especialidad</th>
+                <th>Tipo</th>
+                <th>Sede</th>
+                <th>Estado</th>
+                <th>Notas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cita in citas %}
+            <tr>
+                <td>{{ cita.id }}</td>
+                <td>{{ cita.fecha.strftime('%d/%m/%Y') }}</td>
+                <td>{{ cita.hora }}</td>
+                <td>{{ cita.paciente_nombre }} {{ cita.paciente_apellido }}</td>
+                <td>Dr(a). {{ cita.doctor_nombre }} {{ cita.doctor_apellido }}</td>
+                <td>{{ cita.especialidad }}</td>
+                <td>{{ cita.tipo_cita }}</td>
+                <td>{{ cita.direccion_eps or '—' }}</td>
+                <td><span class="badge badge-{{ cita.estado }}">{{ cita.estado | replace('_',' ') | capitalize }}</span></td>
+                <td>{{ cita.notas or '—' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon"></div>
+        <p>No se encontraron citas con los filtros aplicados.</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

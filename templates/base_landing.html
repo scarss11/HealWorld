@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}EPS HealWorld{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="nav-logo">
+        <div class="logo-icon">H</div>
+        <span>EPS <strong>HealWorld</strong></span>
+      </a>
+      <div class="nav-links">
+        <a href="{{ url_for('pagina_servicios') }}" class="{% if request.endpoint == 'pagina_servicios' %}nav-active{% endif %}">Servicios</a>
+        <a href="{{ url_for('pagina_doctores') }}"  class="{% if request.endpoint == 'pagina_doctores'  %}nav-active{% endif %}">Doctores</a>
+        <a href="{{ url_for('pagina_contacto') }}"  class="{% if request.endpoint == 'pagina_contacto'  %}nav-active{% endif %}">Contacto</a>
+        {% if session.get('usuario_id') %}
+          <a href="{{ url_for('dashboard') }}" class="btn-nav-outline">Mi Cuenta</a>
+          <a href="{{ url_for('logout') }}"    class="btn-nav">Salir</a>
+        {% else %}
+          <a href="{{ url_for('login') }}"   class="btn-nav-outline">Iniciar Sesión</a>
+          <a href="{{ url_for('registro') }}" class="btn-nav">Registrarse</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for cat, msg in messages %}
+          <div class="flash flash-{{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

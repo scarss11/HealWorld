@@ -1,0 +1,43 @@
+{% extends 'base_landing.html' %}
+{% block title %}Iniciar Sesión - EPS HealWorld{% endblock %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-left">
+        <div class="auth-brand">
+            <div class="logo-icon lg">H</div>
+            <h2>EPS <strong>Sura</strong></h2>
+        </div>
+        <h3>Tu salud, nuestra prioridad</h3>
+        <p>Accede a tu historial médico, gestiona tus citas y consulta a nuestros especialistas.</p>
+        <div class="auth-features">
+            <div class="af-item">Agenda citas en minutos</div>
+            <div class="af-item">Historial médico digital</div>
+            <div class="af-item">Acceso 24/7</div>
+        </div>
+    </div>
+    <div class="auth-right">
+        <div class="auth-card">
+            <h2>Iniciar Sesión</h2>
+            <p class="auth-sub">Ingresa con tu correo y contraseña</p>
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" name="correo" placeholder="tu@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-submit">Ingresar →</button>
+            </form>
+            <div class="auth-divider">¿No tienes cuenta?</div>
+            <a href="{{ url_for('registro') }}" class="btn-secondary-full">Registrarse como paciente</a>
+            <div class="auth-demo">
+                <strong>Cuentas demo:</strong><br>
+                admin@eps.com | juan.perez@gmail.com | maria.gonzalez@eps.com<br>
+                <em>Contraseña: password123</em>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'base_dashboard.html' %}
+{% block title %}Mi Dashboard - EPS Sura{% endblock %}
+{% block page_title %}Panel del Paciente{% endblock %}
+{% block content %}
+
+<div class="welcome-banner">
+  <div>
+    <h2>Hola, {{ session.nombre }} 👋</h2>
+    <p>Resumen de tu atención médica</p>
+  </div>
+  <a href="{{ url_for('paciente_reservar') }}" class="btn-primary" style="background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);box-shadow:none">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+    Nueva Cita
+  </a>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-icon-wrap" style="background:rgba(10,132,255,.1)">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#0A84FF" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    </div>
+    <div><div class="stat-val">{{ proximas|length }}</div><div class="stat-lbl">Próximas citas</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon-wrap" style="background:rgba(48,209,88,.1)">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#30D158" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <div><div class="stat-val">{{ todas|selectattr('estado','equalto','atendida')|list|length }}</div><div class="stat-lbl">Atendidas</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon-wrap" style="background:rgba(255,159,10,.1)">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#FF9F0A" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <div><div class="stat-val">{{ todas|selectattr('estado','equalto','pendiente')|list|length }}</div><div class="stat-lbl">Pendientes</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon-wrap" style="background:rgba(255,59,48,.1)">
+      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#FF3B30" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    </div>
+    <div><div class="stat-val">{{ todas|selectattr('estado','equalto','cancelada')|list|length }}</div><div class="stat-lbl">Canceladas</div></div>
+  </div>
+</div>
+
+<div class="section-card">
+  <div class="card-header">
+    <h3>Próximas Citas</h3>
+    <a href="{{ url_for('paciente_mis_citas') }}" class="btn-link">
+      Ver todas
+      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  {% if proximas %}
+  <div class="citas-list">
+    {% for cita in proximas[:3] %}
+    <div class="cita-item">
+      <div class="cita-date">
+        <div class="cita-day">{{ cita.fecha.strftime('%d') }}</div>
+        <div class="cita-mon">{{ cita.fecha.strftime('%b') }}</div>
+      </div>
+      <div class="cita-info">
+        <div class="cita-title">{{ cita.tipo_cita }}</div>
+        <div class="cita-doctor">Dr(a). {{ cita.doctor_nombre }} {{ cita.doctor_apellido }}</div>
+        <div class="cita-meta">{{ cita.hora }} &nbsp;·&nbsp; {{ cita.consultorio }} &nbsp;·&nbsp; {{ cita.especialidad }}</div>
+        {% if cita.direccion_eps %}<div class="cita-meta">{{ cita.direccion_eps }}</div>{% endif %}
+      </div>
+      <div class="cita-actions">
+        <span class="badge badge-pendiente">Pendiente</span>
+        <form method="POST" action="{{ url_for('paciente_cancelar_cita', cita_id=cita.id) }}" id="cancelForm{{ cita.id }}">
+          <button type="button" class="btn-cancel"
+            data-confirm="Se cancelará tu cita del {{ cita.fecha.strftime('%d/%m/%Y') }} a las {{ cita.hora }}."
+            data-confirm-title="¿Cancelar esta cita?"
+            data-confirm-icon="danger">
+            Cancelar
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">
+      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="color:#AEAEB2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    </div>
+    <p>No tienes citas próximas</p>
+    <a href="{{ url_for('paciente_reservar') }}" class="btn-primary sm">Reservar ahora</a>
+  </div>
+  {% endif %}
+</div>
+
+<div class="section-card">
+  <div class="card-header"><h3>Historial Reciente</h3></div>
+  {% if todas %}
+  <table class="data-table">
+    <thead><tr><th>Fecha</th><th>Tipo</th><th>Doctor</th><th>Hora</th><th>Estado</th></tr></thead>
+    <tbody>
+      {% for cita in todas[:6] %}
+      <tr>
+        <td><strong>{{ cita.fecha.strftime('%d/%m/%Y') }}</strong></td>
+        <td>{{ cita.tipo_cita }}</td>
+        <td>Dr(a). {{ cita.doctor_nombre }} {{ cita.doctor_apellido }}</td>
+        <td>{{ cita.hora }}</td>
+        <td><span class="badge badge-{{ cita.estado }}">{{ cita.estado|replace('_',' ')|capitalize }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state"><p>Sin historial de citas aún.</p></div>
+  {% endif %}
+</div>
+
+{% endblock %}
+{% block extra_js %}
+<script>
+// Wire confirm buttons to form submit
+document.querySelectorAll('[data-confirm]').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    const form = this.closest('form');
+    showConfirm({
+      title: this.dataset.confirmTitle,
+      desc: this.dataset.confirm,
+      icon: 'danger',
+      onConfirm: () => form.submit()
+    });
+  });
+});
+</script>
+{% endblock %}

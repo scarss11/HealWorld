@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+flask_session/
+*.sqlite
+.DS_Store
+*.egg-info/
+dist/
+build/

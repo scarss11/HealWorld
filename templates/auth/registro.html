@@ -1,0 +1,70 @@
+{% extends 'base_landing.html' %}
+{% block title %}Registro - EPS HealWorld{% endblock %}
+{% block content %}
+<div class="auth-page">
+    <div class="auth-left">
+        <div class="auth-brand">
+            <div class="logo-icon lg">H</div>
+            <h2>EPS <strong>Sura</strong></h2>
+        </div>
+        <h3>Únete a EPS HealWorld</h3>
+        <p>Regístrate gratis y empieza a gestionar tu salud de manera inteligente.</p>
+        <div class="auth-features">
+            <div class="af-item">Registro en 2 minutos</div>
+            <div class="af-item">Sin costos adicionales</div>
+            <div class="af-item">Datos protegidos</div>
+        </div>
+    </div>
+    <div class="auth-right">
+        <div class="auth-card wide">
+            <h2>Crear Cuenta</h2>
+            <p class="auth-sub">Completa tus datos para registrarte como paciente</p>
+            <form method="POST" action="{{ url_for('registro') }}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" name="nombre" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido</label>
+                        <input type="text" name="apellido" placeholder="Tu apellido" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Número de Documento</label>
+                        <input type="text" name="documento" placeholder="1234567890" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono</label>
+                        <input type="text" name="telefono" placeholder="3001234567">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" name="correo" placeholder="tu@correo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>EPS</label>
+                    <select name="eps">
+                        <option value="EPS HealWorld">EPS HealWorld</option>
+                        <option value="EPS Sanitas">EPS Sanitas</option>
+                        <option value="EPS Compensar">EPS Compensar</option>
+                        <option value="Nueva EPS">Nueva EPS</option>
+                        <option value="Otra">Otra</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" name="password" placeholder="Mínimo 8 caracteres" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Crear cuenta →</button>
+            </form>
+            <div class="auth-divider">¿Ya tienes cuenta?</div>
+            <a href="{{ url_for('login') }}" class="btn-secondary-full">Iniciar Sesión</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base_dashboard.html' %}
+{% block title %}Reservar Cita - EPS HealWorld{% endblock %}
+{% block page_title %}Reservar Nueva Cita{% endblock %}
+{% block content %}
+<div class="form-page">
+  <div class="section-card" style="max-width:640px">
+    <div class="card-header">
+      <div style="display:flex;align-items:center;gap:9px">
+        <div style="width:32px;height:32px;border-radius:9px;background:rgba(48,209,88,.1);display:flex;align-items:center;justify-content:center">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#30D158" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h3>Nueva Cita Médica</h3>
+      </div>
+    </div>
+    <form method="POST" action="{{ url_for('paciente_reservar') }}">
+      <div class="form-group">
+        <label>Especialidad *</label>
+        <select name="especialidad" id="especialidadSelect" required onchange="cargarDoctores(this.value)">
+          <option value="">— Selecciona una especialidad —</option>
+          {% for esp in especialidades %}
+          <option value="{{ esp }}">{{ esp }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Doctor *</label>
+        <select name="doctor_id" id="doctorSelect" required>
+          <option value="">— Primero selecciona especialidad —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tipo de Cita *</label>
+        <select name="tipo_cita" required>
+          <option value="">— Selecciona —</option>
+          <option>Consulta General</option><option>Control</option>
+          <option>Urgencia</option><option>Revisión</option>
+          <option>Procedimiento</option><option>Limpieza Dental</option>
+          <option>Electrocardiograma</option><option>Control Pediátrico</option>
+          <option>Consulta Cardiología</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Fecha *</label>
+          <input type="date" name="fecha" id="fechaInput" required>
+        </div>
+        <div class="form-group">
+          <label>Hora *</label>
+          <select name="hora" required>
+            <option value="">— Hora —</option>
+            {% for h in range(7, 18) %}
+            <option value="{{ '%02d:00' % h }}">{{ '%02d:00' % h }}</option>
+            <option value="{{ '%02d:30' % h }}">{{ '%02d:30' % h }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Dirección de la EPS / Sede</label>
+        <input type="text" name="direccion_eps" placeholder="Ej: Cra 43A #5A-113, Medellín — Sede Centro">
+      </div>
+      <div class="form-actions">
+        <a href="{{ url_for('paciente_dashboard') }}" class="btn-secondary">Cancelar</a>
+        <button type="submit" class="btn-primary">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+          </svg>
+          Confirmar Cita
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+async function cargarDoctores(especialidad) {
+  const sel = document.getElementById('doctorSelect');
+  sel.innerHTML = '<option>Cargando...</option>';
+  if (!especialidad) { sel.innerHTML = '<option value="">— Primero selecciona especialidad —</option>'; return; }
+  const res = await fetch(`/api/doctores/${encodeURIComponent(especialidad)}`);
+  const doctores = await res.json();
+  sel.innerHTML = '<option value="">— Selecciona un doctor —</option>';
+  doctores.forEach(d => {
+    sel.innerHTML += `<option value="${d.id}">Dr(a). ${d.nombre} ${d.apellido} — ${d.consultorio}</option>`;
+  });
+}
+const fi = document.getElementById('fechaInput');
+const t = new Date(); t.setDate(t.getDate()+1);
+fi.min = t.toISOString().split('T')[0];
+</script>
+{% endblock %}

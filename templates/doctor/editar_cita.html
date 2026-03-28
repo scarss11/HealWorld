@@ -1,0 +1,36 @@
+{% extends 'base_dashboard.html' %}
+{% block title %}Editar Cita - EPS Sura{% endblock %}
+{% block page_title %}Editar Cita{% endblock %}
+{% block content %}
+<div class="form-page">
+    <div class="section-card" style="max-width:560px">
+        <div class="card-header">
+            <h3>✏️ Modificar Cita #{{ cita.id }}</h3>
+        </div>
+        <form method="POST">
+            <div class="form-group">
+                <label>Tipo de Cita</label>
+                <input type="text" name="tipo_cita" value="{{ cita.tipo_cita }}" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input type="date" name="fecha" value="{{ cita.fecha.strftime('%Y-%m-%d') }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Hora</label>
+                    <input type="time" name="hora" value="{{ cita.hora }}" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Notas</label>
+                <textarea name="notas" rows="3" placeholder="Observaciones, indicaciones...">{{ cita.notas or '' }}</textarea>
+            </div>
+            <div class="form-actions">
+                <a href="{{ url_for('doctor_agenda') }}" class="btn-secondary">Cancelar</a>
+                <button type="submit" class="btn-primary">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
