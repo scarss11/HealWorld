@@ -1,9 +1,3 @@
-¡Entiendo perfectamente! El problema es que el contenido está mezclado y los bloques de código o tablas se rompen si no tienen el espaciado correcto en Markdown.
-
-Aquí tienes el **README.md** organizado, limpio y con una estructura profesional siguiendo el estilo de Sura. Puedes copiar y pegar esto directamente en tu archivo:
-
----
-
 # 🏥 EPS Sura — Sistema de Gestión de Citas Médicas
 ### Sistema web completo para gestión de citas con diseño corporativo estilo Sura.
 
